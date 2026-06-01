@@ -124,3 +124,34 @@ nav a {
     gap: 12px;
   }
 }
+
+.player-container {
+  padding: 24px;
+}
+
+.video-palyer {
+  height: 450px;
+  border: 1px solid #aaa;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.video-info {
+  margin-bottom: 24px;
+}
+
+.player-actions {
+  didsplay: flex;
+  gap: 16px;
+}
+
+.player-actions button,
+.back-button {
+  padding: 12px 18px;
+  border: 1px solid #999;
+  background: white;
+  cursor: pointer;
+}
