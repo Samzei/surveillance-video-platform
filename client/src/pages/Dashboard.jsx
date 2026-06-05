@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
+import { recordings } from "../data/recordings";
 
 function Dashboard() {
-    const clips = [1, 2, 3, 4, 5, 6];
-
     return (
         <div className="app">
             <header className="top-nav">
@@ -36,8 +35,9 @@ function Dashboard() {
                         <label>Camera</label>
                         <select>
                             <option>All Cameras</option>
-                            <option value="">Camera 1</option>
-                            <option value="">Camera 2</option>
+                            <option>Front door Camera</option>
+                            <option>Driveway Camera</option>
+                            <option>Garden Camera</option>
                         </select>
 
                         <button>Apply Filters</button>
@@ -46,11 +46,14 @@ function Dashboard() {
                     <section className="recordings">
                         <h2>Recent Recordings</h2>
                         <div className="video-grid">
-                            {clips.map((clip) => (
-                                <Link to="/video" className="clip-card" key={clip}>
+                            {recordings.map((clip) => (
+                                <Link to={'/video/${clip.id}'} className="clip-card" key={clip.id}>
                                     <div className="thumbnail">Thumbnail</div>
-                                    <p>Camera {clip}</p>
-                                    <p>12/03/2026 14:{clip}2</p>
+                                    <p>{clip.camera}</p>
+                                    <p>
+                                        {clip.date} {clip.time}
+                                    </p>
+                                    <p>{clip.description}</p>
                                 </Link>
                             ))}
                         </div>
