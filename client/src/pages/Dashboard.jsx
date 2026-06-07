@@ -1,7 +1,27 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { recordings } from "../data/recordings";
 
 function Dashboard() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedCamera, setSelectedCamera] = useState("All Cameras");
+    const [selectedDate, setSelectedDate] = useState("");
+    
+    const filteredRecordings = recordings.filter((cip) => {
+        const matchesSearch =
+            clip.camera.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            clip.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            clip.date.includes(searchTerm) ||
+            clip.time.includes(searchTerm);
+
+        const matchesCamera =
+            selectedCamera === "All Camera" || clip.camera === selectedCamera;
+            
+        const matchesDate =
+            selectedDate === "" || clip.date.split("/").reverse().join("-") === selectedDate;
+        
+        return matchesSearch && matchesCamera && matchesDate;
+    })
     return (
         <div className="app">
             <header className="top-nav">
@@ -16,7 +36,12 @@ function Dashboard() {
 
             <main className="dashboard">
                 <section className="search-section">
-                    <input type="text" placeholder="Search by date or time ..." />
+                    <input 
+                        type="text" 
+                        placeholder="Search by date, time or description..." 
+                        value={searchTerm}
+                        onChange={(event) => setSearchTerm(event.target.value)}
+                    />
                 </section>
 
                 <section className="content">
@@ -24,13 +49,17 @@ function Dashboard() {
                         <h2>Filters</h2>
 
                         <label>Date</label>
-                        <input type="date" />
+                        <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={(event) => setSelectedDate(event.target.value)}
+                        />
 
-                        <label>From</label>
-                        <input type="time" />
-                        
-                        <label>To</label>
-                        <input type="time" />
+                        <label>Camera</label>
+                        <input 
+                            value={selectedCamera}
+                            onChange={(event) => setSelectedCamera(event.target.value)}
+                        />
                         
                         <label>Camera</label>
                         <select>
@@ -40,14 +69,30 @@ function Dashboard() {
                             <option>Garden Camera</option>
                         </select>
 
-                        <button>Apply Filters</button>
+                        <button
+                            onClick={() => {
+                                setSearchTerm("");
+                                setSelectedCamera("All Camera");
+                                setSelectedDate("");
+                            }}
+                        >
+                            Clear Filters
+                        </button>
                     </aside>
 
                     <section className="recordings">
                         <h2>Recent Recordings</h2>
-                        <div className="video-grid">
-                            {recordings.map((clip) => (
-                                <Link to={'/video/${clip.id}'} className="clip-card" key={clip.id}>
+
+                        {filteredRecordings.length === 0 ?(
+                            <p>No recordings found.</p>
+                        ) : (
+                            <div className="video-grid">
+                            {filteredRecordings.map((clip) => (
+                                <Link 
+                                    to={'/video/${clip.id}'} 
+                                    className="clip-card" 
+                                    key={clip.id}
+                                >
                                     <div className="thumbnail">Thumbnail</div>
                                     <p>{clip.camera}</p>
                                     <p>
@@ -57,6 +102,8 @@ function Dashboard() {
                                 </Link>
                             ))}
                         </div>
+                        )}
+                        
                     </section>
                 </section>
             </main>
