@@ -47,7 +47,13 @@ function VideoPlayer() {
         <div className="player-actions">
           <button>Play</button>
           <button>Pause</button>
-          <button>Download</button>
+          <a 
+            href={clip.videoUrl}
+            download
+            className="download-button"
+          >
+            Download
+          </a>
           <button onClick={() => setShowShareModal(true)}>Share</button>
         </div>
       </main>

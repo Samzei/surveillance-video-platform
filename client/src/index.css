@@ -213,3 +213,12 @@ nav a {
   background: black;
 }
 
+.download-botton {
+  padding: 12px 18px;
+  border: 1px solid #999;
+  text-decoration: none;
+  color: black;
+  background: white;
+  display: inline-block;
+}
+
