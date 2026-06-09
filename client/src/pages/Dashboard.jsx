@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { recordings } from "../data/recordings";
 
-function Dashboard() {
+function Dashboard({ setIsAuthenticated }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCamera, setSelectedCamera] = useState("All Cameras");
     const [selectedDate, setSelectedDate] = useState("");
@@ -31,6 +31,12 @@ function Dashboard() {
                     <a href="#">Recordings</a>
                     <a href="#">Settings</a>
                     <a href="#">Profile</a>
+                    <button 
+                        className="logout-button"
+                        onClick={() => setIsAuthenticated(false)}
+                    >
+                        Logout
+                    </button>
                 </nav>
             </header>
 
