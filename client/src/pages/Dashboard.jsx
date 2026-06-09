@@ -7,7 +7,7 @@ function Dashboard() {
     const [selectedCamera, setSelectedCamera] = useState("All Cameras");
     const [selectedDate, setSelectedDate] = useState("");
     
-    const filteredRecordings = recordings.filter((cip) => {
+    const filteredRecordings = recordings.filter((clip) => {
         const matchesSearch =
             clip.camera.toLowerCase().includes(searchTerm.toLowerCase()) ||
             clip.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -89,7 +89,7 @@ function Dashboard() {
                             <div className="video-grid">
                             {filteredRecordings.map((clip) => (
                                 <Link 
-                                    to={'/video/${clip.id}'} 
+                                    to={`/video/${clip.id}`} 
                                     className="clip-card" 
                                     key={clip.id}
                                 >

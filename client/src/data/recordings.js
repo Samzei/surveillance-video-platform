@@ -5,6 +5,7 @@ export const recordings = [
     date: "12/03/2026",
     time: "14:32",
     description: "Motion detected near front door",
+    videoUrl: "/videos/sample.mp4",
   },
   {
     id: "2",
@@ -12,6 +13,7 @@ export const recordings = [
     date: "12/03/2026",
     time: "15:10",
     description: "Vehicle movement detected",
+    videoUrl: "/videos/sample.mp4",
   },
   {
     id: "3",
@@ -19,6 +21,7 @@ export const recordings = [
     date: "13/03/2026",
     time: "09:45",
     description: "Movement detected in garden area",
+    videoUrl: "/videos/sample.mp4",
   },
   {
     id: "4",
@@ -26,6 +29,7 @@ export const recordings = [
     date: "13/03/2026",
     time: "18:20",
     description: "Delivery activity recorded",
+    videoUrl: "/videos/sample.mp4",
   },
   {
     id: "5",
@@ -33,6 +37,7 @@ export const recordings = [
     date: "14/03/2026",
     time: "11:05",
     description: "Person detected near driveway",
+    videoUrl: "/videos/sample.mp4",
   },
   {
     id: "6",
@@ -40,5 +45,6 @@ export const recordings = [
     date: "14/03/2026",
     time: "21:15",
     description: "Night movement detected",
+    videoUrl: "/videos/sample.mp4",
   },
 ];
