@@ -6,21 +6,33 @@ import Login from "./pages/Login";
 import { useState } from "react";
 
 function App() {
-  const [IsAuthenticated, setIsAuthenticated] = useState(false);
+  const [IsAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem("isAuthenticated") === "true"
+  });
+
+  function loginUser() {
+    localStorage.setItem("isAuthenticated", "true");
+    setIsAuthenticated(true);
+  }
+
+  function logoutUser() {
+    localStorage.removeItem("isAuthenticated");
+    setIsAuthenticated(false);
+  }
 
   return (
     <BrowserRouter>
       <Routes>
         <Route 
           path="/login"
-          element={<Login setIsAuthenticated={setIsAuthenticated} />}
+          element={<Login loginUser={loginUser} />}
         />
 
         <Route 
           path="/" 
           element={
             IsAuthenticated ? (
-              <Dashboard setIsAuthenticated={setIsAuthenticated} />
+              <Dashboard logoutUser={logoutUser} />
             ) : (
               <Navigate to="/login" />
             )

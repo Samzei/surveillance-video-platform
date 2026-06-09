@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Login({ setIsAuthenticated }) {
+function Login({ loginUser }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -11,7 +11,7 @@ function Login({ setIsAuthenticated }) {
         event.preventDefault();
 
         if (email === "demo@secureview.com" && password === "password") {
-            setIsAuthenticated(true);
+            loginUser();
             navigate("/");
         } else {
             alert("Invalid login details. Try demo@secureview.com and password");
