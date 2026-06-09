@@ -5,8 +5,7 @@ import { recordings } from "../data/recordings";
 function VideoPlayer() {
   const { id } = useParams();
   const [showShareModal, setShowShareModal] = useState(false);
-  console.log("URL id", id);
-  console.log("Recordings:", recordings);
+  const [shareLink, setShareLink] = useState("");
 
   const clip = recordings.find((recording) => String(recording.id) === id);
 
@@ -81,9 +80,38 @@ function VideoPlayer() {
             </select>
 
             <div className="modal-actions">
-              <button>Generate Link</button>
+              <button
+                onClick={() => {
+                  const generatedLink = 
+                    window.location.origin + `/video/${clip.id}`;
+
+                  setShareLink(generatedLink);
+                }}
+              >
+                Generated Link  
+              </button>
               <button>Confirm Share</button>
               <button onClick={() => setShowShareModal(false)}>Cancel</button>
+
+              {shareLink && (
+                <div className="generated-link">
+                  <p>Generated Link:</p>
+
+                  <input 
+                    type="text"
+                    value={shareLink}
+                    readOnly
+                  />
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(shareLink);
+                      alert("Link copied!");
+                    }}
+                  >
+                    Copy Link
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

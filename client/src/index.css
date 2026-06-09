@@ -222,3 +222,15 @@ nav a {
   display: inline-block;
 }
 
+.generated-link {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.generated-link input {
+  padding: 10px;
+  border: 1px solid #999;
+}
+
