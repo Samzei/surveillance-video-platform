@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
-const recordings = require("./recordings.json");
+const recordings = require("./data/recordings.json");
 
 const app = express();
 

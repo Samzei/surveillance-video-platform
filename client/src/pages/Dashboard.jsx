@@ -1,12 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { recordings } from "../data/recordings";
 
 function Dashboard({ logoutUser }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCamera, setSelectedCamera] = useState("All Cameras");
     const [selectedDate, setSelectedDate] = useState("");
-    
+    const [recordings, setRecordings] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/recordings")
+            .then((response) => response.json())
+            .then((data) => {
+                setRecordings(data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error fetching recordings:", error);
+                setLoading(false);
+            });
+    }, []);
+        
     const filteredRecordings = recordings.filter((clip) => {
         const matchesSearch =
             clip.camera.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -15,13 +29,17 @@ function Dashboard({ logoutUser }) {
             clip.time.includes(searchTerm);
 
         const matchesCamera =
-            selectedCamera === "All Camera" || clip.camera === selectedCamera;
+            selectedCamera === "All Cameras" || clip.camera === selectedCamera;
             
         const matchesDate =
             selectedDate === "" || clip.date.split("/").reverse().join("-") === selectedDate;
         
         return matchesSearch && matchesCamera && matchesDate;
     })
+
+    if (loading) {
+        return <p>Loading recordings ...</p>
+    }
     return (
         <div className="app">
             <header className="top-nav">
@@ -60,15 +78,12 @@ function Dashboard({ logoutUser }) {
                             value={selectedDate}
                             onChange={(event) => setSelectedDate(event.target.value)}
                         />
-
-                        <label>Camera</label>
-                        <input 
-                            value={selectedCamera}
-                            onChange={(event) => setSelectedCamera(event.target.value)}
-                        />
                         
                         <label>Camera</label>
-                        <select>
+                        <select
+                            value={selectedCamera}
+                            onChange={(event) => setSelectedCamera(event.target.value)}
+                        >
                             <option>All Cameras</option>
                             <option>Front door Camera</option>
                             <option>Driveway Camera</option>
@@ -78,7 +93,7 @@ function Dashboard({ logoutUser }) {
                         <button
                             onClick={() => {
                                 setSearchTerm("");
-                                setSelectedCamera("All Camera");
+                                setSelectedCamera("All Cameras");
                                 setSelectedDate("");
                             }}
                         >
@@ -94,6 +109,7 @@ function Dashboard({ logoutUser }) {
                         ) : (
                             <div className="video-grid">
                             {filteredRecordings.map((clip) => (
+                                
                                 <Link 
                                     to={`/video/${clip.id}`} 
                                     className="clip-card" 
