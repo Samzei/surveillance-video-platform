@@ -1,13 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { recordings } from "../data/recordings";
 
 function VideoPlayer() {
   const { id } = useParams();
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/recordings/${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Recording not found");
+        }
+        
+        return response.json();
+      })
+      .then((data) => {
+        setClip(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  }, [id]);
+
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareLink, setShareLink] = useState("");
 
-  const clip = recordings.find((recording) => String(recording.id) === id);
+  const [clip, setClip] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  if (loading) {
+    return <h2>Loading recording...</h2>;
+  }
 
   if (!clip) {
     return (
