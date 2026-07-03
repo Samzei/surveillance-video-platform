@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "camera": "Front Door Camera",
+    "date": "12/03/2026",
+    "time": "14:32",
+    "description": "Motion detected near front door",
+    "actions": ["rstp test", "live camera recording", "motion"],
+    "videoUrl": "/videos/test.mp4"
+  },
+  {
+    "id": "2",
+    "camera": "Driveway Camera",
+    "date": "12/03/2026",
+    "time": "15:10",
+    "description": "Vehicle movement detected",
+    "actions": ["rstp test", "live camera recording", "motion"],
+    "videoUrl": "/videos/test.mp4"
+  }
+]
