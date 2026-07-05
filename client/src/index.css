@@ -270,5 +270,11 @@ nav a {
   cursor: pointer;
 }
 
-
+.action-tags {
+  font-size: 14px;
+  color: #333;
+  background: #f1f1f1;
+  padding: 8px;
+  border-left: 3px solid #999;
+}
 

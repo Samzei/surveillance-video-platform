@@ -14,7 +14,7 @@ async function getRecordingById(req, res) {
     try {
         const {id} = req.params;
 
-        const recording = recordingService.getRecordingById(id);
+        const recording = await recordingService.getRecordingById(id);
 
         if (!recording) {
             return res.status(404).json({

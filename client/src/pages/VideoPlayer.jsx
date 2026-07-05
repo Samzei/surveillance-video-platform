@@ -65,6 +65,7 @@ function VideoPlayer() {
           <p>Time: {clip.time}</p>
           <p>Camera: {clip.camera}</p>
           <p>Description: {clip.description}</p>
+          {clip.action && <p>Actions: {clip.actions}</p>}
         </div>
 
         <div className="player-actions">

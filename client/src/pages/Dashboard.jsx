@@ -31,7 +31,8 @@ function Dashboard({ logoutUser }) {
             clip.camera.toLowerCase().includes(searchTerm.toLowerCase()) ||
             clip.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
             clip.date.includes(searchTerm) ||
-            clip.time.includes(searchTerm);
+            clip.time.includes(searchTerm) ||
+            (clip.actions && clip.actions.toLowerCase().includes(search));
 
         const matchesCamera =
             selectedCamera === "All Cameras" || clip.camera === selectedCamera;
@@ -126,6 +127,10 @@ function Dashboard({ logoutUser }) {
                                         {clip.date} {clip.time}
                                     </p>
                                     <p>{clip.description}</p>
+
+                                    {clip.actions && (
+                                        <p className="action-tags">Actions: {clip.actions}</p>
+                                    )}
                                 </Link>
                             ))}
                         </div>
