@@ -27,6 +27,8 @@ function Dashboard({ logoutUser }) {
     }, []);
         
     const filteredRecordings = recordings.filter((clip) => {
+        const search = searchTerm.toLowerCase();
+
         const matchesSearch =
             clip.camera.toLowerCase().includes(searchTerm.toLowerCase()) ||
             clip.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -35,10 +37,12 @@ function Dashboard({ logoutUser }) {
             (clip.actions && clip.actions.toLowerCase().includes(search));
 
         const matchesCamera =
-            selectedCamera === "All Cameras" || clip.camera === selectedCamera;
+            selectedCamera === "All Cameras" || 
+            clip.camera === selectedCamera;
             
         const matchesDate =
-            selectedDate === "" || clip.date.split("/").reverse().join("-") === selectedDate;
+            selectedDate === "" || 
+            clip.date.split("/").reverse().join("-") === selectedDate;
         
         return matchesSearch && matchesCamera && matchesDate;
     })
@@ -46,6 +50,13 @@ function Dashboard({ logoutUser }) {
     if (loading) {
         return <p>Loading recordings ...</p>
     }
+
+    function getActionTags(actions) {
+        if (!actions) return [];
+
+        return actions.split(",").map((action) => action.trim());
+    }
+
     return (
         <div className="app">
             <header className="top-nav">
@@ -129,7 +140,21 @@ function Dashboard({ logoutUser }) {
                                     <p>{clip.description}</p>
 
                                     {clip.actions && (
-                                        <p className="action-tags">Actions: {clip.actions}</p>
+                                        <div className="tag-list">
+                                            {getActionTags(clip.actions).map((action) => (
+                                                <button
+                                                    type="button"
+                                                    className="action-badge"
+                                                    key={action}
+                                                    onClick={(event) => {
+                                                        event.preventDefault();
+                                                        setSearchTerm(action);
+                                                    }}
+                                                >
+                                                    {action}
+                                                </button>
+                                            ))}
+                                        </div>
                                     )}
                                 </Link>
                             ))}

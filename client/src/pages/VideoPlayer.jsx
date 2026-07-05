@@ -42,6 +42,12 @@ function VideoPlayer() {
     );
   }
 
+  function getActionTags(actions) {
+    if (!actions) return [];
+    
+    return actions.split(",").map((action) => action.trim());
+  }
+
   return (
     <div className="video-page">
       <header className="top-nav">
@@ -65,7 +71,18 @@ function VideoPlayer() {
           <p>Time: {clip.time}</p>
           <p>Camera: {clip.camera}</p>
           <p>Description: {clip.description}</p>
-          {clip.action && <p>Actions: {clip.actions}</p>}
+          {clip.actions && (
+            <div>
+              <p>Actions:</p>
+              <div className="tag-list">
+                {getActionTags(clip.actions).map((action) => (
+                  <span className="action-badge" key={action}>
+                    {action}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="player-actions">

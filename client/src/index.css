@@ -278,3 +278,22 @@ nav a {
   border-left: 3px solid #999;
 }
 
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.action-badge {
+  padding: 6px 10px;
+  border: 1px solid #999;
+  background: #f1f1f1;
+  border-radius: 16px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.action-badge:hover {
+  background: #e0e0e0;
+}
