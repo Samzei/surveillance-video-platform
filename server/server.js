@@ -1,27 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 
-const recordings = require("./data/recordings.json");
+const recordingRoutes = require("./routes/recordingRoutes.js");
 
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
-app.get("/api/recordings", (req, res) => {
-    const {id} = req.params;
-
-    const recording = recordings.find(
-        (recording) => recording.id === id
-    );
-
-    if (!recording) {
-        return res.status(404).json({
-            message: "Recording not found"
-        });
-    }
-
-    res.json(recordings);
-})
+app.use("/api/recordings", recordingRoutes);
 
 const PORT = 5000;
 
