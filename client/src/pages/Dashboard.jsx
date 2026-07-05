@@ -12,7 +12,12 @@ function Dashboard({ logoutUser }) {
         fetch("http://localhost:5000/api/recordings")
             .then((response) => response.json())
             .then((data) => {
-                setRecordings(data);
+                if (Array.isArray(data)) {
+                    setRecordings(data);
+                } else {
+                    console.error("Expected an array but got:", data);
+                    setRecordings([]);
+                }
                 setLoading(false);
             })
             .catch((error) => {

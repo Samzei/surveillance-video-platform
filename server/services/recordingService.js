@@ -1,11 +1,13 @@
-const recordings = require("../data/recordings.json");
+const openDb = require("../database/db");
 
-function getAllRecordings() {
-    return recordings;
+async function getAllRecordings() {
+    const db = await openDb();
+    return db.all("SELECT * FROM recordings ORDER BY id DESC");
 }
 
-function getRecordingById(id) {
-    return recordings.find((recording) => String(recording.id) === String(id));
+async function getRecordingById(id) {
+    const db = await openDb();
+    return db.get("SELECT * FROM recordings WHERE id = ?", [id]);
 }
 
 module.exports = {
