@@ -57,6 +57,18 @@ function Dashboard({ logoutUser }) {
         return actions.split(",").map((action) => action.trim());
     }
 
+    const totalRecordings = recordings.length;
+    
+    const totalCameras = new Set(recordings.map((clip) => clip.camera)).size;
+
+    const totalTaggedEvents = recordings.reduce((total, clip) => {
+        if (!clip.actions) return total;
+
+        return total + clip.actions.split(",").length;
+    }, 0);
+
+    const latestRecording = recordings[0];
+
     return (
         <div className="app">
             <header className="top-nav">
@@ -76,6 +88,31 @@ function Dashboard({ logoutUser }) {
             </header>
 
             <main className="dashboard">
+                <section className="stats-grid">
+                    <div className="stat-card">
+                        <h3>Total Recordings</h3>
+                        <p>{totalRecordings}</p>
+                    </div>
+
+                    <div className="stat-card">
+                        <h3>Cameras</h3>
+                        <p>{totalCameras}</p>
+                    </div>
+
+                    <div className="stat-card">
+                        <h3>Tagged Event</h3>
+                        <p>{totalTaggedEvents}</p>
+                    </div>
+
+                    <div className="stat-card">
+                        <h3>Latest Recording</h3>
+                        <p>
+                            {latestRecording
+                                ?`${latestRecording.date} ${latestRecording.time}`
+                                : "N/A"}
+                        </p>
+                    </div>
+                </section>
                 <section className="search-section">
                     <input 
                         type="text" 

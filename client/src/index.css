@@ -297,3 +297,40 @@ nav a {
 .action-badge:hover {
   background: #e0e0e0;
 }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 18px;
+}
+
+.stat-card h3 {
+  margin: 0 0 10px;
+  font-size; 15px;
+  color: #444;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
