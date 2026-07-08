@@ -6,6 +6,7 @@ async function initDb() {
     await db.exec(`
         CREATE TABLE IF NOT EXISTS recordings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            filename TEXT UNIQUE,
             camera TEXT NOT NULL,
             date TEXT NOT NULL,
             time TEXT NOT NULL,
@@ -21,27 +22,29 @@ async function initDb() {
     if (existingRecordings.length === 0) {
         await db.run(
             `
-            INSERT INTO recordings (camera, date, time, description, videoUrl, actions)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO recordings (filename, camera, date, time, description, videoUrl, actions)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             `,
+                "test.mp4",
                 "Tapo C110",
                 "12/03/2026",
                 "14:32",
                 "Real RTSP test recording from Tapo C110",
-                "/videos/test.mp4",
+                "http://localhost:5000/videos/test.mp4",
                 "person detected, movement, front door, rtsp test",
         );
 
         await db.run(
             `
-            INSERT INTO recordings (camera, date, time, description, videoUrl, actions)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO recordings (filename, camera, date, time, description, videoUrl, actions)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             `,
+                "sample.mp4",
                 "Front Door Camera",
                 "12/03/2026",
                 "15:10",
                 "Sample front door movement recording",
-                "/videos/sample.mp4",
+                "http://localhost:5000/videos/sample.mp4",
                 "front door, movement, visitor, sample",
         );
     }
