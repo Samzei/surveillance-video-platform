@@ -3,7 +3,7 @@ const cors = require("cors");
 
 const recordingRoutes = require("./routes/recordingRoutes");
 const initDb = require("./database/initDb");
-const scanVideosFolder = require("./services/recordingScanner");
+const { scanVideosFolder } = require("./services/recordingScanner");
 
 const path = require("path");
 
