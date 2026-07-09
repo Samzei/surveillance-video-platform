@@ -5,6 +5,8 @@ const recordingRoutes = require("./routes/recordingRoutes");
 const initDb = require("./database/initDb");
 const { scanVideosFolder } = require("./services/recordingScanner");
 
+const startFileWatcher = require("./services/fileWatcher");
+
 const path = require("path");
 
 const app = express();
@@ -20,6 +22,8 @@ const PORT = 5000;
 
 initDb().then(async () => {
     await scanVideosFolder();
+
+    startFileWatcher();
 
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
