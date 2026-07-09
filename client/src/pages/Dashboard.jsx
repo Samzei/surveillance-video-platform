@@ -9,21 +9,28 @@ function Dashboard({ logoutUser }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/recordings")
-            .then((response) => response.json())
-            .then((data) => {
-                if (Array.isArray(data)) {
-                    setRecordings(data);
-                } else {
-                    console.error("Expected an array but got:", data);
-                    setRecordings([]);
-                }
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error fetching recordings:", error);
-                setLoading(false);
-            });
+        function fetchRecordings() {
+            fetch("http://localhost:5000/api/recordings")
+                .then((response) => response.json())
+                .then((data) => {
+                    if (Array.isArray(data)) {
+                        setRecordings(data);
+                    } else {
+                        console.error("Expected an array but got:", data);
+                        setRecordings([]);
+                    }
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error("Error fetching recordings:", error);
+                    setLoading(false);
+                });
+        }
+        fetchRecordings();
+        
+        const interval = setInterval(fetchRecordings, 5000);
+
+        return () => clearInterval(interval);
     }, []);
         
     const filteredRecordings = recordings.filter((clip) => {
