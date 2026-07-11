@@ -334,3 +334,22 @@ nav a {
     grid-template-columns: 1fr;
   }
 }
+
+.capture-panel {
+  background: white;
+  border; 1px solid #ccc;
+  padding: 18px;
+  margin-bottom: 24px;
+}
+
+.capture-panel button {
+  padding: 12px 18px;
+  border: 1px solid #999;
+  background: white;
+  cursor: pointer;
+}
+
+capture-panel button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

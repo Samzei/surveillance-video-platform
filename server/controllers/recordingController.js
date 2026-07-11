@@ -1,4 +1,5 @@
 const recordingService = require("../services/recordingService");
+const captureService = require("../services/captureService");
 
 async function getAllRecordings(req, res) {
     try {
@@ -30,7 +31,39 @@ async function getRecordingById(req, res) {
 
 }
 
+async function captureRecording(req, res) {
+    try {
+        const requestedDuration = Number(req.body.duration ?? 15);
+
+        if (
+            !Number.isFinite(requestedDuration) ||
+            requestedDuration < 5 ||
+            requestedDuration > 60
+        ) {
+            return res.status(400).json({
+                message: "Duration must be between 5 and 60 seconds.",
+            });
+        }
+
+        const result = await captureService.captureRecording(
+            requestedDuration
+        );
+
+        res.status(201).json({
+            message: "Recording completed successfully.",
+            recording: result,
+        });
+    } catch (error) {
+        console.error("Camera capture failed:", error );
+        
+        res.status(500).json({
+            message: "Unable to capture recording from the camera.",
+        });
+    }
+}
+
 module.exports ={
     getAllRecordings,
     getRecordingById,
+    captureRecording,
 };

@@ -7,6 +7,8 @@ function Dashboard({ logoutUser }) {
     const [selectedDate, setSelectedDate] = useState("");
     const [recordings, setRecordings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isCapturing, setIsCaptureMessage] = useState(false);
+    const [captureMessage, setCaptureMessage] = useState("");
 
     useEffect(() => {
         function fetchRecordings() {
@@ -76,6 +78,43 @@ function Dashboard({ logoutUser }) {
 
     const latestRecording = recordings[0];
 
+    async function handleCapture() {
+        try {
+            setIsCapturing(true);
+            setCaptureMessage("Recording from Tapo C110...");
+
+            const response = await fetch(
+                "http://localhost:5000/api/recordings/capture",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    boddy: JSON.stringify({
+                        duration: 15,
+                    }),
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Camera recording failed."
+                );
+            }
+
+            setCaptureMessage(
+                "Recording completed: It will appear shortly."
+            );
+        } catch (error) {
+            console.error("Capture error:", error);
+            setCaptureMessage(error.message);
+        } finally {
+            setIsCapturing(false);
+        }
+    }
+
     return (
         <div className="app">
             <header className="top-nav">
@@ -119,6 +158,26 @@ function Dashboard({ logoutUser }) {
                                 : "N/A"}
                         </p>
                     </div>
+                </section>
+                <section className="Capture-panel">
+                    <div>
+                        <h2>Camera Capture</h2>
+                        <p>Record a 15-second clip from the Tapo C110.</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={handleCapture}
+                        disabled={isCapturing}
+                    >
+                        {isCapturing
+                            ? "Recording..."
+                            : "Recording 15 seconds"}
+                    </button>
+
+                    {captureMessage && (
+                        <p role="status">{CaptureMessage}</p>
+                    )}
                 </section>
                 <section className="search-section">
                     <input 
