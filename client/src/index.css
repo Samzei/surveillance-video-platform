@@ -353,3 +353,73 @@ capture-panel button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
+
+.application {
+  min-height: 100vh;
+}
+
+.text-normal {
+  font-size: 16px;
+}
+
+.text-large {
+  font-size: 19px;
+}
+
+.text-extra-large {
+  font-size: 22px;
+}
+
+.accessibility-controls h2 {
+  width: 100%;
+  margin: 0;
+}
+
+.accessibility-controls select {
+  padding: 10px;
+  font: 1nherit;
+}
+
+.contrast-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.high-cotrast {
+  background: black;
+  color: white;
+}
+
+.high-contrast body,
+.high-contrast .dashboard,
+.high-contrast .login-page {
+  background: black;
+  color: white;
+}
+
+.high-contrast .top-nav,
+.high-contrast .stat-card,
+.high-contrast .filters,
+.high-contrast .recordings,
+.high-contrast .video-info,
+.high-contrast .capture-panel,
+.high-contrast .accessibility-controls,
+.high-contrast .login-card,
+.high-contrast .share-modal {
+  background: black;
+  color: white;
+  border-color: white;
+} 
+
+.high-contrast  {
+  color: yellow;
+}
+
+button:focus-vissible,
+a:focus-visisble,
+input:focus-visible,
+select:focus-visible {
+  outline: 4px solid currentColor;
+  outline-offset: 3px;
+}

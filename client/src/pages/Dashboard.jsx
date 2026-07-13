@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import AccessibilityControls from "../components/AccessibilityControls";
 
 function Dashboard({ logoutUser }) {
     const [searchTerm, setSearchTerm] = useState("");
@@ -159,6 +160,7 @@ function Dashboard({ logoutUser }) {
                         </p>
                     </div>
                 </section>
+                <AccessibilityControls />
                 <section className="Capture-panel">
                     <div>
                         <h2>Camera Capture</h2>
