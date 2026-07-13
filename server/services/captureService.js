@@ -56,8 +56,8 @@ function captureRecording(duration = 15) {
             "-c:v",
             "copy",
             "-c:a",
-            "aac"
-            "-b:a"
+            "aac",
+            "-b:a",
             "64k",
             "-movflags",
             "+faststart",

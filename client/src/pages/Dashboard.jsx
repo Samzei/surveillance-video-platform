@@ -57,6 +57,11 @@ function Dashboard({ logoutUser }) {
         return matchesSearch && matchesCamera && matchesDate;
     })
 
+    const resultMessage = 
+        filteredRecordings.length === 1
+            ? "1 recording found"
+            : `${filteredRecordings.length} recordings found`;
+
     if (loading) {
         return <p>Loading recordings ...</p>
     }
@@ -118,14 +123,22 @@ function Dashboard({ logoutUser }) {
 
     return (
         <div className="app">
+            <a href="#main-content" className="skip-link">
+                Skip to main content
+            </a>
             <header className="top-nav">
                 <div className="logo">SecureView</div>
-                <nav>
-                    <a href="#">Home</a>
-                    <a href="#">Recordings</a>
-                    <a href="#">Settings</a>
-                    <a href="#">Profile</a>
-                    <button 
+                <nav aria-label="Main navigation">
+                    <Link to="/" aria-current="page">
+                        Home
+                    </Link>
+
+                    <a href="#recordings-heading">
+                        Recordings
+                    </a>
+
+                    <button
+                        type="button"
                         className="logout-button"
                         onClick={logoutUser}
                     >
@@ -134,7 +147,7 @@ function Dashboard({ logoutUser }) {
                 </nav>
             </header>
 
-            <main className="dashboard">
+            <main id="main-content" className="dashboard">
                 <section className="stats-grid">
                     <div className="stat-card">
                         <h3>Total Recordings</h3>
@@ -182,9 +195,14 @@ function Dashboard({ logoutUser }) {
                     )}
                 </section>
                 <section className="search-section">
-                    <input 
-                        type="text" 
-                        placeholder="Search by date, time or description..." 
+                    <label htmlFor="recording-search">
+                        Search Recordings
+                    </label>
+
+                    <input
+                        id="recording-search" 
+                        type="search" 
+                        placeholder="Search by camera, date, time, description or action" 
                         value={searchTerm}
                         onChange={(event) => setSearchTerm(event.target.value)}
                     />
@@ -194,15 +212,17 @@ function Dashboard({ logoutUser }) {
                     <aside className="filters">
                         <h2>Filters</h2>
 
-                        <label>Date</label>
+                        <label htmlFor="date-filter">Date</label>
                         <input
+                            id="date-filter"
                             type="date"
                             value={selectedDate}
                             onChange={(event) => setSelectedDate(event.target.value)}
                         />
                         
-                        <label>Camera</label>
+                        <label htmlFor="camera-filter">Camera</label>
                         <select
+                            id="camera-filter"
                             value={selectedCamera}
                             onChange={(event) => setSelectedCamera(event.target.value)}
                         >
@@ -210,6 +230,7 @@ function Dashboard({ logoutUser }) {
                             <option>Front door Camera</option>
                             <option>Driveway Camera</option>
                             <option>Garden Camera</option>
+                            <option>Tapo C110</option>
                         </select>
 
                         <button
@@ -224,47 +245,53 @@ function Dashboard({ logoutUser }) {
                     </aside>
 
                     <section className="recordings">
-                        <h2>Recent Recordings</h2>
+                        <h2 id="recordings-heading">Recent Recordings</h2>
 
                         {filteredRecordings.length === 0 ?(
                             <p>No recordings found.</p>
                         ) : (
-                            <div className="video-grid">
-                            {filteredRecordings.map((clip) => (
-                                
-                                <Link 
-                                    to={`/video/${clip.id}`} 
-                                    className="clip-card" 
-                                    key={clip.id}
-                                >
-                                    <div className="thumbnail">Thumbnail</div>
-                                    <p>{clip.camera}</p>
-                                    <p>
-                                        {clip.date} {clip.time}
-                                    </p>
-                                    <p>{clip.description}</p>
+                            <>
+                                <p className="sr-only" role="status" aria-live="polite">
+                                    {resultMessage}
+                                </p>
 
-                                    {clip.actions && (
-                                        <div className="tag-list">
-                                            {getActionTags(clip.actions).map((action) => (
-                                                <button
-                                                    type="button"
-                                                    className="action-badge"
-                                                    key={action}
-                                                    onClick={(event) => {
-                                                        event.preventDefault();
-                                                        setSearchTerm(action);
-                                                    }}
-                                                >
-                                                    {action}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
-                                </Link>
-                            ))}
-                        </div>
-                        )}
+                                <div className="video-grid">
+                                {filteredRecordings.map((clip) => (
+                                    
+                                    <Link 
+                                        to={`/video/${clip.id}`} 
+                                        className="clip-card" 
+                                        key={clip.id}
+                                    >
+                                        <div className="thumbnail">Thumbnail</div>
+                                        <p>{clip.camera}</p>
+                                        <p>
+                                            {clip.date} {clip.time}
+                                        </p>
+                                        <p>{clip.description}</p>
+
+                                        {clip.actions && (
+                                            <div className="tag-list">
+                                                {getActionTags(clip.actions).map((action) => (
+                                                    <button
+                                                        type="button"
+                                                        className="action-badge"
+                                                        key={action}
+                                                        onClick={(event) => {
+                                                            event.preventDefault();
+                                                            setSearchTerm(action);
+                                                        }}
+                                                    >
+                                                        {action}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </Link>
+                                ))}
+                            </div>    
+                        </>
+                    )}
                         
                     </section>
                 </section>
