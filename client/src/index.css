@@ -506,3 +506,78 @@ select:focus-visible {
 .high-contrast .status-indicator.online {
   background: lime;
 }
+
+.capture-panel {
+  background: white;
+  border; 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.capture-panel label {
+  display: block;
+  margin: 14px 0 6px;
+  font-weight: bold;
+}
+
+.capture-panel select {
+  display: block;
+  min-width: 180px;
+  padding: 10px;
+  margin-bottom: 14px;
+  font: inherit;
+}
+
+.capture-panel button {
+  padding: 12px 18px;
+  border; 1px solid #999;
+  background: white;
+  cursor: pointer;
+  font: inherit;
+}
+
+.capture-panel button:disabled,
+.capture-panel select:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.capture-progress [
+  margin-top: 18px;
+]
+
+.progress-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 18px;
+  border: 1px solid #555;
+  background: #eee;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%,
+  background: currentColor;
+  transition: width 1s linear;
+}
+
+.high-contrast .capture-panel [
+  background: black;
+  color: white;
+  border-color: white;
+]
+
+.high-contrast .progress-track {
+  background: black;
+  border: 2px solid white;
+}
+
+.high-contrast .progress-fill {
+  background: yellow;
+}

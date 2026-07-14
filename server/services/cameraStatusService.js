@@ -49,13 +49,13 @@ function checkCameraStatus() {
 
         const ffprobeCommand = process.env.FFPROBE_PATH || "C:\\ffmpeg\\bin\\ffprobe.exe";
 
-        console.log({
-            ffprobeCommand,
-            usernameLoaded: Boolean(process.env.TAPO_USERNAME),
-            passwordLoaded: Boolean(process.env.TAPO_PASSWORD),
-            ipLoaded: Boolean(process.env.TAPO_IP),
-            stream: process.env.TAPO_STREAM,
-        });
+        // console.log({
+        //     ffprobeCommand,
+        //     usernameLoaded: Boolean(process.env.TAPO_USERNAME),
+        //     passwordLoaded: Boolean(process.env.TAPO_PASSWORD),
+        //     ipLoaded: Boolean(process.env.TAPO_IP),
+        //     stream: process.env.TAPO_STREAM,
+        // });
 
         const ffprobe = spawn(ffprobeCommand, args, {
             windowsHide: true,

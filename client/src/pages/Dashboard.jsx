@@ -8,8 +8,10 @@ function Dashboard({ logoutUser }) {
     const [selectedDate, setSelectedDate] = useState("");
     const [recordings, setRecordings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [captureDuration, setCaptureDuration] = useState(15);
     const [isCapturing, setIsCapturing] = useState(false);
     const [captureMessage, setCaptureMessage] = useState("");
+    const [secondsRemaining, setSecondsRemaining] = useState(0);
     const [cameraStatus, setCameraStatus] = useState(null);
     const [cameraStatusLoading, setCameraStatusLoading] = useState(true);
 
@@ -68,6 +70,20 @@ function Dashboard({ logoutUser }) {
 
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        if (!isCapturing || secondsRemaining <= 0) {
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setSecondsRemaining((currentSeconds) =>
+                Math.max(currentSeconds - 1, 0)
+            );
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [isCapturing, secondsRemaining]);
         
     const filteredRecordings = recordings.filter((clip) => {
         const search = searchTerm.toLowerCase();
@@ -120,6 +136,7 @@ function Dashboard({ logoutUser }) {
     async function handleCapture() {
         try {
             setIsCapturing(true);
+            setSecondsRemaining(captureDuration);
             setCaptureMessage("Recording from Tapo C110...");
 
             const response = await fetch(
@@ -130,7 +147,7 @@ function Dashboard({ logoutUser }) {
                         "Content-Type": "application/json",
                     },
                     boddy: JSON.stringify({
-                        duration: 15,
+                        duration: captureDuration,
                     }),
                 }
             );
@@ -143,16 +160,30 @@ function Dashboard({ logoutUser }) {
                 );
             }
 
+            setSecondsRemaining(0);
+            
+
             setCaptureMessage(
-                "Recording completed: It will appear shortly."
+                "Recording completed successfully. It will appear on the dashboard shortly."
             );
         } catch (error) {
             console.error("Capture error:", error);
-            setCaptureMessage(error.message);
+
+            setSecondsRemaining(0);
+            setCaptureMessage(
+                error.message || "Unable to record from the camera."
+            );
         } finally {
             setIsCapturing(false);
         }
     }
+
+    const captureProgress = 
+        isCapturing && captureDuration > 0
+            ? ((captureDuration - secondsRemaining) /
+                captureDuration) *
+                100
+            : 0;
 
     return (
         <div className="app">
@@ -264,24 +295,87 @@ function Dashboard({ logoutUser }) {
                     )}
                     </section>
                 <AccessibilityControls />
-                <section className="Capture-panel">
-                    <div>
-                        <h2>Camera Capture</h2>
-                        <p>Record a 15-second clip from the Tapo C110.</p>
-                    </div>
+                <section 
+                    className="Capture-panel"
+                    aria-labelledby="capture-heading"
+                >
+                    
+                    <h2 id="capture-heading">Camera Capture</h2>
+                    <p>
+                        Create a new recording from the Tapo C110 camera.
+                    </p>
 
+                    <label htmlFor="capture-duration">
+                        Recording duration
+                    </label>
+
+                    <select
+                        id="capture-duration"
+                        value={captureDuration}
+                        onChange={(event) =>
+                            setCaptureDuration(Number(event.target.value))
+                        }
+                        disabled={isCapturing}
+                    >
+                        <option value={5}>5 seconds</option>
+                        <option value={15}>15 seconds</option>
+                        <option value={30}>30 seconds</option>
+                        <option value={60}>60 seconds</option>
+                    </select>
+                   
                     <button
                         type="button"
                         onClick={handleCapture}
-                        disabled={isCapturing}
+                        disabled={
+                            isCapturing || cameraStatus?.connected === false
+                        }
                     >
                         {isCapturing
-                            ? "Recording..."
-                            : "Recording 15 seconds"}
+                            ? "Recording in progress..."
+                            : "Start Recording"}
                     </button>
 
+                    {cameraStatus?.connected === false && (
+                        <p role="alert">
+                            The camera must br online before a recording can begin
+                        </p>
+                    )}
+
+                    {isCapturing && (
+                        <div className="capture-progress">
+                            <div className="progress-details">
+                                <span>Recording</span>
+
+                                <span>
+                                    {secondsRemaining}{" "}
+                                    {secondsRemaining === 1 ? "second" : "seconds"}{" "}
+                                    remaining
+                                </span>
+                            </div>
+
+                            <div
+                                className="progress-track"
+                                role="progressbar"
+                                aria-label="Camera recording progress"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow={Math.round(captureProgress)}
+                            >
+                                <div
+                                    className="progress-fill"
+                                    style={{
+                                        width: `${captureProgress}%`
+                                    }}
+                                />
+
+                            </div>
+                        </div>
+                    )}
+
                     {captureMessage && (
-                        <p role="status" aria-live="polite">{captureMessage}</p>
+                        <p role="status" aria-live="polite">
+                            {captureMessage}
+                        </p>
                     )}
                 </section>
                 <section className="search-section">
