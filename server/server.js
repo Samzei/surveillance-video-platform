@@ -9,6 +9,8 @@ const { scanVideosFolder } = require("./services/recordingScanner");
 
 const startFileWatcher = require("./services/fileWatcher");
 
+const cameraRoutes = require("./routes/cameraRoutes");
+
 const path = require("path");
 
 const app = express();
@@ -19,6 +21,7 @@ app.use(express.json());
 app.use("/videos", express.static(path.join(__dirname, "videos")));
 
 app.use("/api/recordings", recordingRoutes);
+app.use("/api/camera", cameraRoutes);
 
 const PORT = 5000;
 

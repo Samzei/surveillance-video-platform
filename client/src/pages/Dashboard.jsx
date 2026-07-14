@@ -8,8 +8,10 @@ function Dashboard({ logoutUser }) {
     const [selectedDate, setSelectedDate] = useState("");
     const [recordings, setRecordings] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isCapturing, setIsCaptureMessage] = useState(false);
+    const [isCapturing, setIsCapturing] = useState(false);
     const [captureMessage, setCaptureMessage] = useState("");
+    const [cameraStatus, setCameraStatus] = useState(null);
+    const [cameraStatusLoading, setCameraStatusLoading] = useState(true);
 
     useEffect(() => {
         function fetchRecordings() {
@@ -32,6 +34,37 @@ function Dashboard({ logoutUser }) {
         fetchRecordings();
         
         const interval = setInterval(fetchRecordings, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        async function fetchCameraStatus() {
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/api/camera/status"
+                );
+
+                const data = await response.json();
+
+                setCameraStatus(data);
+            } catch (error) {
+                console.error("Camera status request failed;", error);
+
+                setCameraStatus({
+                    connected: false,
+                    status: "Unavailable",
+                    message: "Could not contact the backend.",
+                });
+                
+            } finally {
+                setCameraStatusLoading(false);
+            }
+        }
+
+        fetchCameraStatus();
+
+        const interval = setInterval(fetchCameraStatus, 30000);
 
         return () => clearInterval(interval);
     }, []);
@@ -173,6 +206,63 @@ function Dashboard({ logoutUser }) {
                         </p>
                     </div>
                 </section>
+                <section
+                    className="camera-status-panel"
+                    aria-labelledby="camera-status-heading"
+                    >
+                    <div className="camera-status-header">
+                    <h2 id="camera-status-heading">Camera Status</h2>
+
+                    <span
+                        className={`status-indicator ${
+                        cameraStatus?.connected ? "online" : "offline"
+                        }`}
+                        aria-hidden="true"
+                    />
+                    </div>
+
+                    {cameraStatusLoading ? (
+                    <p role="status">Checking camera connection...</p>
+                    ) : (
+                    <>
+                        <p>
+                        <strong>Camera:</strong>{" "}
+                        {cameraStatus?.camera || "Tapo C110"}
+                        </p>
+
+                        <p>
+                        <strong>Status:</strong>{" "}
+                        {cameraStatus?.status || "Unknown"}
+                        </p>
+
+                        {cameraStatus?.connected && (
+                        <>
+                            <p>
+                            <strong>Stream:</strong> {cameraStatus.stream}
+                            </p>
+
+                            <p>
+                            <strong>Resolution:</strong>{" "}
+                            {cameraStatus.resolution}
+                            </p>
+
+                            <p>
+                            <strong>Video codec:</strong>{" "}
+                            {cameraStatus.codec}
+                            </p>
+                        </>
+                        )}
+
+                        {!cameraStatus?.connected && cameraStatus?.message && (
+                        <p role="alert">{cameraStatus.message}</p>
+                        )}
+
+                        <p className="sr-only" aria-live="polite">
+                        Camera is {cameraStatus?.connected ? "online" : "offline"}.
+                        </p>
+                    </>
+                    )}
+                    </section>
                 <AccessibilityControls />
                 <section className="Capture-panel">
                     <div>
@@ -191,7 +281,7 @@ function Dashboard({ logoutUser }) {
                     </button>
 
                     {captureMessage && (
-                        <p role="status">{CaptureMessage}</p>
+                        <p role="status" aria-live="polite">{captureMessage}</p>
                     )}
                 </section>
                 <section className="search-section">

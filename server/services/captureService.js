@@ -67,7 +67,9 @@ function captureRecording(duration = 15) {
 
         console.log(`[Capture] Starting ${duration}-second recording...`);
 
-        const ffmpeg = spawn("ffmpeg", ffmpegArguments, {
+        const ffmpegCommand = process.env.FFMPEG_PATH || "ffmpeg";
+
+        const ffmpeg = spawn(ffmpegCommand, ffmpegArguments, {
             windowsHide: true,
         });
 

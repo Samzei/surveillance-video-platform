@@ -463,3 +463,46 @@ select:focus-visible {
 .share-modal:focus {
   outline: none;
 }
+
+.camera-status-panel {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 18px;
+  margin-bottm: 24px;
+}
+
+.camera-status-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.camera-status-header h2 {
+  margin: 0;
+}
+
+.status-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 2px solid currentColor;
+}
+
+.status-indicator .online {
+  background: green;
+}
+
+.status-indicator .offline {
+  background: #b00020;
+}
+
+.high-contrast .camera-satus-panel {
+  background: black;
+  color: white;
+  border-color: white;
+}
+
+.high-contrast .status-indicator.online {
+  background: lime;
+}
