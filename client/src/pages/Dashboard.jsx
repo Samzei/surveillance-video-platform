@@ -212,273 +212,277 @@ function Dashboard({ logoutUser }) {
             </header>
 
             <main id="main-content" className="dashboard">
-                <section className="stats-grid">
-                    <div className="stat-card">
-                        <h3>Total Recordings</h3>
-                        <p>{totalRecordings}</p>
-                    </div>
+                <div className="dashboard-container">
+                    <section className="stats-grid">
+                        <div className="stat-card">
+                            <h3>Total Recordings</h3>
+                            <p>{totalRecordings}</p>
+                        </div>
 
-                    <div className="stat-card">
-                        <h3>Cameras</h3>
-                        <p>{totalCameras}</p>
-                    </div>
+                        <div className="stat-card">
+                            <h3>Cameras</h3>
+                            <p>{totalCameras}</p>
+                        </div>
 
-                    <div className="stat-card">
-                        <h3>Tagged Event</h3>
-                        <p>{totalTaggedEvents}</p>
-                    </div>
+                        <div className="stat-card">
+                            <h3>Tagged Event</h3>
+                            <p>{totalTaggedEvents}</p>
+                        </div>
 
-                    <div className="stat-card">
-                        <h3>Latest Recording</h3>
-                        <p>
-                            {latestRecording
-                                ?`${latestRecording.date} ${latestRecording.time}`
-                                : "N/A"}
-                        </p>
-                    </div>
-                </section>
-                <section
-                    className="camera-status-panel"
-                    aria-labelledby="camera-status-heading"
-                    >
-                    <div className="camera-status-header">
-                    <h2 id="camera-status-heading">Camera Status</h2>
+                        <div className="stat-card">
+                            <h3>Latest Recording</h3>
+                            <p>
+                                {latestRecording
+                                    ?`${latestRecording.date} ${latestRecording.time}`
+                                    : "N/A"}
+                            </p>
+                        </div>
+                    </section>
+                    <section
+                        className="camera-status-panel"
+                        aria-labelledby="camera-status-heading"
+                        >
+                        <div className="camera-status-header">
+                        <h2 id="camera-status-heading">Camera Status</h2>
 
-                    <span
-                        className={`status-indicator ${
-                        cameraStatus?.connected ? "online" : "offline"
-                        }`}
-                        aria-hidden="true"
-                    />
-                    </div>
+                        <span
+                            className={`status-indicator ${
+                            cameraStatus?.connected ? "online" : "offline"
+                            }`}
+                        > 
+                            {cameraStatus?.connected ? "Online" : "Offline"}
+                        </span>
+                        </div>
 
-                    {cameraStatusLoading ? (
-                    <p role="status">Checking camera connection...</p>
-                    ) : (
-                    <>
-                        <p>
-                        <strong>Camera:</strong>{" "}
-                        {cameraStatus?.camera || "Tapo C110"}
-                        </p>
-
-                        <p>
-                        <strong>Status:</strong>{" "}
-                        {cameraStatus?.status || "Unknown"}
-                        </p>
-
-                        {cameraStatus?.connected && (
+                        {cameraStatusLoading ? (
+                        <p role="status">Checking camera connection...</p>
+                        ) : (
                         <>
                             <p>
-                            <strong>Stream:</strong> {cameraStatus.stream}
+                            <strong>Camera:</strong>{" "}
+                            {cameraStatus?.camera || "Tapo C110"}
                             </p>
 
                             <p>
-                            <strong>Resolution:</strong>{" "}
-                            {cameraStatus.resolution}
+                            <strong>Status:</strong>{" "}
+                            {cameraStatus?.status || "Unknown"}
                             </p>
 
-                            <p>
-                            <strong>Video codec:</strong>{" "}
-                            {cameraStatus.codec}
-                            </p>
-                        </>
-                        )}
-
-                        {!cameraStatus?.connected && cameraStatus?.message && (
-                        <p role="alert">{cameraStatus.message}</p>
-                        )}
-
-                        <p className="sr-only" aria-live="polite">
-                        Camera is {cameraStatus?.connected ? "online" : "offline"}.
-                        </p>
-                    </>
-                    )}
-                    </section>
-                <AccessibilityControls />
-                <section 
-                    className="Capture-panel"
-                    aria-labelledby="capture-heading"
-                >
-                    
-                    <h2 id="capture-heading">Camera Capture</h2>
-                    <p>
-                        Create a new recording from the Tapo C110 camera.
-                    </p>
-
-                    <label htmlFor="capture-duration">
-                        Recording duration
-                    </label>
-
-                    <select
-                        id="capture-duration"
-                        value={captureDuration}
-                        onChange={(event) =>
-                            setCaptureDuration(Number(event.target.value))
-                        }
-                        disabled={isCapturing}
-                    >
-                        <option value={5}>5 seconds</option>
-                        <option value={15}>15 seconds</option>
-                        <option value={30}>30 seconds</option>
-                        <option value={60}>60 seconds</option>
-                    </select>
-                   
-                    <button
-                        type="button"
-                        onClick={handleCapture}
-                        disabled={
-                            isCapturing || cameraStatus?.connected === false
-                        }
-                    >
-                        {isCapturing
-                            ? "Recording in progress..."
-                            : "Start Recording"}
-                    </button>
-
-                    {cameraStatus?.connected === false && (
-                        <p role="alert">
-                            The camera must br online before a recording can begin
-                        </p>
-                    )}
-
-                    {isCapturing && (
-                        <div className="capture-progress">
-                            <div className="progress-details">
-                                <span>Recording</span>
-
-                                <span>
-                                    {secondsRemaining}{" "}
-                                    {secondsRemaining === 1 ? "second" : "seconds"}{" "}
-                                    remaining
-                                </span>
-                            </div>
-
-                            <div
-                                className="progress-track"
-                                role="progressbar"
-                                aria-label="Camera recording progress"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                                aria-valuenow={Math.round(captureProgress)}
-                            >
-                                <div
-                                    className="progress-fill"
-                                    style={{
-                                        width: `${captureProgress}%`
-                                    }}
-                                />
-
-                            </div>
-                        </div>
-                    )}
-
-                    {captureMessage && (
-                        <p role="status" aria-live="polite">
-                            {captureMessage}
-                        </p>
-                    )}
-                </section>
-                <section className="search-section">
-                    <label htmlFor="recording-search">
-                        Search Recordings
-                    </label>
-
-                    <input
-                        id="recording-search" 
-                        type="search" 
-                        placeholder="Search by camera, date, time, description or action" 
-                        value={searchTerm}
-                        onChange={(event) => setSearchTerm(event.target.value)}
-                    />
-                </section>
-
-                <section className="content">
-                    <aside className="filters">
-                        <h2>Filters</h2>
-
-                        <label htmlFor="date-filter">Date</label>
-                        <input
-                            id="date-filter"
-                            type="date"
-                            value={selectedDate}
-                            onChange={(event) => setSelectedDate(event.target.value)}
-                        />
-                        
-                        <label htmlFor="camera-filter">Camera</label>
-                        <select
-                            id="camera-filter"
-                            value={selectedCamera}
-                            onChange={(event) => setSelectedCamera(event.target.value)}
-                        >
-                            <option>All Cameras</option>
-                            <option>Front door Camera</option>
-                            <option>Driveway Camera</option>
-                            <option>Garden Camera</option>
-                            <option>Tapo C110</option>
-                        </select>
-
-                        <button
-                            onClick={() => {
-                                setSearchTerm("");
-                                setSelectedCamera("All Cameras");
-                                setSelectedDate("");
-                            }}
-                        >
-                            Clear Filters
-                        </button>
-                    </aside>
-
-                    <section className="recordings">
-                        <h2 id="recordings-heading">Recent Recordings</h2>
-
-                        {filteredRecordings.length === 0 ?(
-                            <p>No recordings found.</p>
-                        ) : (
+                            {cameraStatus?.connected && (
                             <>
-                                <p className="sr-only" role="status" aria-live="polite">
-                                    {resultMessage}
+                                <p>
+                                <strong>Stream:</strong> {cameraStatus.stream}
                                 </p>
 
-                                <div className="video-grid">
-                                {filteredRecordings.map((clip) => (
-                                    
-                                    <Link 
-                                        to={`/video/${clip.id}`} 
-                                        className="clip-card" 
-                                        key={clip.id}
-                                    >
-                                        <div className="thumbnail">Thumbnail</div>
-                                        <p>{clip.camera}</p>
-                                        <p>
-                                            {clip.date} {clip.time}
-                                        </p>
-                                        <p>{clip.description}</p>
+                                <p>
+                                <strong>Resolution:</strong>{" "}
+                                {cameraStatus.resolution}
+                                </p>
 
-                                        {clip.actions && (
-                                            <div className="tag-list">
-                                                {getActionTags(clip.actions).map((action) => (
-                                                    <button
-                                                        type="button"
-                                                        className="action-badge"
-                                                        key={action}
-                                                        onClick={(event) => {
-                                                            event.preventDefault();
-                                                            setSearchTerm(action);
-                                                        }}
-                                                    >
-                                                        {action}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </Link>
-                                ))}
-                            </div>    
+                                <p>
+                                <strong>Video codec:</strong>{" "}
+                                {cameraStatus.codec}
+                                </p>
+                            </>
+                            )}
+
+                            {!cameraStatus?.connected && cameraStatus?.message && (
+                            <p role="alert">{cameraStatus.message}</p>
+                            )}
+
+                            <p className="sr-only" aria-live="polite">
+                            Camera is {cameraStatus?.connected ? "online" : "offline"}.
+                            </p>
                         </>
-                    )}
+                        )}
+                        </section>
+                    <AccessibilityControls />
+                    <section 
+                        className="Capture-panel"
+                        aria-labelledby="capture-heading"
+                    >
                         
+                        <h2 id="capture-heading">Camera Capture</h2>
+                        <p>
+                            Create a new recording from the Tapo C110 camera.
+                        </p>
+
+                        <label htmlFor="capture-duration">
+                            Recording duration
+                        </label>
+
+                        <select
+                            id="capture-duration"
+                            value={captureDuration}
+                            onChange={(event) =>
+                                setCaptureDuration(Number(event.target.value))
+                            }
+                            disabled={isCapturing}
+                        >
+                            <option value={5}>5 seconds</option>
+                            <option value={15}>15 seconds</option>
+                            <option value={30}>30 seconds</option>
+                            <option value={60}>60 seconds</option>
+                        </select>
+                    
+                        <button
+                            type="button"
+                            onClick={handleCapture}
+                            disabled={
+                                isCapturing || cameraStatus?.connected === false
+                            }
+                        >
+                            {isCapturing
+                                ? "Recording in progress..."
+                                : "Start Recording"}
+                        </button>
+
+                        {cameraStatus?.connected === false && (
+                            <p role="alert">
+                                The camera must br online before a recording can begin
+                            </p>
+                        )}
+
+                        {isCapturing && (
+                            <div className="capture-progress">
+                                <div className="progress-details">
+                                    <span>Recording</span>
+
+                                    <span>
+                                        {secondsRemaining}{" "}
+                                        {secondsRemaining === 1 ? "second" : "seconds"}{" "}
+                                        remaining
+                                    </span>
+                                </div>
+
+                                <div
+                                    className="progress-track"
+                                    role="progressbar"
+                                    aria-label="Camera recording progress"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    aria-valuenow={Math.round(captureProgress)}
+                                >
+                                    <div
+                                        className="progress-fill"
+                                        style={{
+                                            width: `${captureProgress}%`
+                                        }}
+                                    />
+
+                                </div>
+                            </div>
+                        )}
+
+                        {captureMessage && (
+                            <p role="status" aria-live="polite">
+                                {captureMessage}
+                            </p>
+                        )}
                     </section>
-                </section>
+                    <section className="search-section">
+                        <label htmlFor="recording-search">
+                            Search Recordings
+                        </label>
+
+                        <input
+                            id="recording-search" 
+                            type="search" 
+                            placeholder="Search by camera, date, time, description or action" 
+                            value={searchTerm}
+                            onChange={(event) => setSearchTerm(event.target.value)}
+                        />
+                    </section>
+
+                    <section className="content">
+                        <aside className="filters">
+                            <h2>Filters</h2>
+
+                            <label htmlFor="date-filter">Date</label>
+                            <input
+                                id="date-filter"
+                                type="date"
+                                value={selectedDate}
+                                onChange={(event) => setSelectedDate(event.target.value)}
+                            />
+                            
+                            <label htmlFor="camera-filter">Camera</label>
+                            <select
+                                id="camera-filter"
+                                value={selectedCamera}
+                                onChange={(event) => setSelectedCamera(event.target.value)}
+                            >
+                                <option>All Cameras</option>
+                                <option>Front door Camera</option>
+                                <option>Driveway Camera</option>
+                                <option>Garden Camera</option>
+                                <option>Tapo C110</option>
+                            </select>
+
+                            <button
+                                onClick={() => {
+                                    setSearchTerm("");
+                                    setSelectedCamera("All Cameras");
+                                    setSelectedDate("");
+                                }}
+                            >
+                                Clear Filters
+                            </button>
+                        </aside>
+
+                        <section className="recordings">
+                            <h2 id="recordings-heading">Recent Recordings</h2>
+
+                            {filteredRecordings.length === 0 ?(
+                                <p>No recordings found.</p>
+                            ) : (
+                                <>
+                                    <p className="sr-only" role="status" aria-live="polite">
+                                        {resultMessage}
+                                    </p>
+
+                                    <div className="video-grid">
+                                    {filteredRecordings.map((clip) => (
+                                        
+                                        <Link 
+                                            to={`/video/${clip.id}`} 
+                                            className="clip-card" 
+                                            key={clip.id}
+                                        >
+                                            <div className="thumbnail">Thumbnail</div>
+                                            <p>{clip.camera}</p>
+                                            <p>
+                                                {clip.date} {clip.time}
+                                            </p>
+                                            <p>{clip.description}</p>
+
+                                            {clip.actions && (
+                                                <div className="tag-list">
+                                                    {getActionTags(clip.actions).map((action) => (
+                                                        <button
+                                                            type="button"
+                                                            className="action-badge"
+                                                            key={action}
+                                                            onClick={(event) => {
+                                                                event.preventDefault();
+                                                                setSearchTerm(action);
+                                                            }}
+                                                        >
+                                                            {action}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </Link>
+                                    ))}
+                                </div>    
+                            </>
+                        )}
+                            
+                        </section>
+                    </section>
+                </div>
+                
             </main>
         </div>
     );
