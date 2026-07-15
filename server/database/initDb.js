@@ -12,9 +12,28 @@ async function initDb() {
             time TEXT NOT NULL,
             description TEXT,
             videoUrl TEXT NOT NULL,
-            actions TEXT
+            actions TEXT,
+            thumbnailUrl TEXT
         )
     `);
+
+    const tableColumns = await db.all(
+        "PRAGMA table_info(recordings)"
+    );
+
+    const hasThumbnailColumn = tableColumns.some(
+     (column) => column.name === "thumbnailUrl"
+    );
+
+    if (!hasThumbnailColumn) {
+     await db.exec(
+        "ALTER TABLE recordings ADD COLUMN thumbnailUrl TEXT"
+    );
+
+    console.log(
+        "Added thumbnailUrl column to recordings table"
+    );
+    }
 
     const existingRecordings = await db.all("SELECT * FROM recordings");
     console.log(existingRecordings);

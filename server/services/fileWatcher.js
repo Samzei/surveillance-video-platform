@@ -9,6 +9,11 @@ function startFileWatcher() {
         ignored: /(^|[\/\\])\../,
         persitent: true,
         ignoreInitial: true,
+
+        awaitWriteFinish: {
+            stabilityThreshold: 2000,
+            pollInterval: 200,
+        },
     });
 
     watcher.on("add", async (filepath) => {

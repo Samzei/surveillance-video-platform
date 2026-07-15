@@ -220,14 +220,22 @@ nav a {
 }
 
 .thumbnail {
-  height: 120px; 
-  background: linear-gradient(135deg, #dfe5ea, #f3f5f7);
+  width: 100%;
+  height: 160px; 
+  background: #e7ebef;
+  overflow: hidden;
   display:  flex;
   align-items: center;
   justify-content: center;
   color: #5f6b76;
-  font-weight: 650;
   border-bottom: 1px solid #d8dee4;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display; block;
 }
 
 @media (max-width: 800px) {

@@ -449,7 +449,17 @@ function Dashboard({ logoutUser }) {
                                             className="clip-card" 
                                             key={clip.id}
                                         >
-                                            <div className="thumbnail">Thumbnail</div>
+                                            <div className="thumbnail">
+                                                {clip.thumbnailUrl ? (
+                                                    <img
+                                                        src={clip.thumbnailUrl}
+                                                        alt={`Preview of recording from $[clip.camera]`}
+                                                        loading="lazy"
+                                                    />
+                                                ) : (
+                                                    <span>No preview available</span>
+                                                )}
+                                            </div>
                                             <p>{clip.camera}</p>
                                             <p>
                                                 {clip.date} {clip.time}

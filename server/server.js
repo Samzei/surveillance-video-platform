@@ -20,6 +20,11 @@ app.use(express.json());
 
 app.use("/videos", express.static(path.join(__dirname, "videos")));
 
+app.use(
+    "/thumbnails",
+    express.static(path.join(__dirname, "thumbnails"))
+);
+
 app.use("/api/recordings", recordingRoutes);
 app.use("/api/camera", cameraRoutes);
 
