@@ -339,7 +339,7 @@ function Dashboard({ logoutUser }) {
 
                         {cameraStatus?.connected === false && (
                             <p role="alert">
-                                The camera must br online before a recording can begin
+                                The camera must be online before a recording can begin
                             </p>
                         )}
 
